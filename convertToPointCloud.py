@@ -32,17 +32,11 @@ def plotPoints(points):
     plt.show()
 
 
-
-
-
-
-def main():
-    vertices = []
-
-    f = openFile("sample.obj")
-    data = pd.DataFrame(list(csv.reader(f, delimiter=" ")),columns=["type", "x", "y", "z"])
-   # data.index += 1 
+def getPointsFromFile(file):
+    data = pd.DataFrame(list(csv.reader(file, delimiter=" ")),columns=["type", "x", "y", "z"])
+    # data.index += 1
     
+
     vertices = data[data["type"] == "v"]
     vertices = vertices.drop(["type"], axis=1)
     vertices = vertices.astype("float")
@@ -51,8 +45,18 @@ def main():
     faces =  data[data["type"] == "f"]
     faces = faces.drop(["type"], axis=1)
     faces = faces.astype("int")
+    return (vertices, faces)
 
-    plotPoints(vertices)
+
+
+def main():
+
+    f = openFile("axle shaft.obj")
+    points,_ = getPointsFromFile(f)
+
+
+   
+    plotPoints(points)
 
 
 
