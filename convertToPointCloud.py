@@ -17,7 +17,7 @@ def plotPoints(points):
     z_vals = points["z"]
     
 
-    print(x_vals)
+   
     #ax.scatter3D(x_vals, y_vals, z_vals, cmap='Greens')
    
     img = ax.scatter(x_vals,  z_vals,y_vals)
@@ -32,7 +32,7 @@ def plotPoints(points):
     plt.show()
 
 
-def getPointsFromFile(file):
+def getPointsFromFile(file, normalize = True):
     data = pd.DataFrame(list(csv.reader(file, delimiter=" ")),columns=["type", "x", "y", "z"])
     # data.index += 1
     
@@ -41,21 +41,38 @@ def getPointsFromFile(file):
     vertices = vertices.drop(["type"], axis=1)
     vertices = vertices.astype("float")
 
+    
+
+    if(normalize):
+
+        globalMin = min([vertices["x"].min(), vertices["y"].min(), vertices["z"].min()])
+        globalMax = max([vertices["x"].max(), vertices["y"].max(), vertices["z"].max()])
+
+        normalized_vertices_x=(vertices["x"]-globalMin)/(globalMax-globalMin)
+        normalized_vertices_y=(vertices["y"]-globalMin)/(globalMax-globalMin)
+        normalized_vertices_z=(vertices["z"]-globalMin)/(globalMax-globalMin)
+
+        vertices["x"] = normalized_vertices_x
+        vertices["y"] = normalized_vertices_y
+        vertices["z"] = normalized_vertices_z
 
     faces =  data[data["type"] == "f"]
     faces = faces.drop(["type"], axis=1)
     faces = faces.astype("int")
+    
+
+
     return (vertices, faces)
 
 
 
 def main():
 
-    f = openFile("axle shaft.obj")
-    points,_ = getPointsFromFile(f)
+    f = openFile("sample.obj")
+    points, _ = getPointsFromFile(f, normalize=True)
 
 
-   
+    
     plotPoints(points)
 
 
