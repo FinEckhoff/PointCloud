@@ -64,6 +64,8 @@ def getPointsFromFile(file, normalize = True):
 
     return (vertices, faces)
 
+def convertToGrid(points):
+    points3d = np.array()
 
 
 def main():
@@ -71,13 +73,9 @@ def main():
     f = openFile("sample.obj")
     points, _ = getPointsFromFile(f, normalize=True)
 
+    convertToGrid(points)
 
-    
-    plotPoints(points)
-
-
+    return points
 
 
 
-
-main()
